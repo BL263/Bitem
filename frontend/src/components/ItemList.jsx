@@ -28,7 +28,7 @@ const ItemList = () => {
         <h2 className="text-xl font-bold mb-4">Filters</h2>
         <div className="mb-2">
           <label className="block text-sm font-medium text-gray-700">Category</label>
-          <select className="mt-1 w-full border border-gray-300 rounded px-2 py-1">
+          <select className="mt-1 w-full border dark:text-black  border-gray-300 rounded px-2 py-1">
             <option>All</option>
             <option>Electronics</option>
             <option>Fashion</option>

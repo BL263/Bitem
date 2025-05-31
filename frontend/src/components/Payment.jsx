@@ -20,16 +20,17 @@ const PaymentModal = ({ selectedItem, handleCardPopup }) => {
       card,
     });
 
+    console.log("Payment Method:", paymentMethod);
+    console.log("Error:", error);
     if (error) {
       alert(error.message);
       return;
     }
-
-    // ✅ Call your backend with paymentMethod.id and item info
+    
     try {
       const res = await buyItem({
-        itemId: selectedItem._id,
-        paymentMethodId: paymentMethod.id,
+        iId: selectedItem._id,
+        pId: paymentMethod.id,
       });
       alert("Payment successful!");
       handleCardPopup(false);
