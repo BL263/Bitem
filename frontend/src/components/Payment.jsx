@@ -28,9 +28,15 @@ const PaymentModal = ({ selectedItem, handleCardPopup }) => {
     }
     
     try {
-      const res = await buyItem({
-        iId: selectedItem._id,
-        pId: paymentMethod.id,
+      const validPid = /^[0-9a-fA-F]{24}$/.test(paymentMethod.id) ? paymentMethod.id : null;
+      if (!validPid) {
+        alert("Invalid payment method ID format.");
+        return;
+      }
+
+      await buyItem({
+        iid: selectedItem._id, // Ensure field names match API expectations
+        pid: validPid, // Correct field name for `pid`
       });
       alert("Payment successful!");
       handleCardPopup(false);

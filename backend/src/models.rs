@@ -18,3 +18,9 @@ pub struct User {
     pub name: String,
     pub email: String,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Purchase {
+    pub iId: ObjectId,
+    pub pid: ObjectId
+}

@@ -39,24 +39,13 @@ pub async fn get_item(path: web::Path<String>) -> impl Responder {
     }
 }
 
-pub async fn buy_item(path: web::Path<String>) -> impl Responder {
+pub async fn buy_item(body: web::Json<models::Purchase>) -> impl Responder {
     let database = db::connect_db().await;
 
-    let input = path.into_inner();
-    let parts: Vec<&str> = input.split('-').collect();
-    if parts.len() != 2 {
-        return HttpResponse::BadRequest().body("Input must be in the format `${itemId}-${productId}`");
-    }
+    let item_id = &body.iId;
+    let pay_id = &body.pid;
 
-    let item_id = parts[0];
-    let pay_id = parts[1];
-
-    let obj_id = match ObjectId::parse_str(item_id) {
-        Ok(oid) => oid,
-        Err(_) => return HttpResponse::BadRequest().body("Invalid ObjectId for itemId"),
-    };
-
-    match services::buy_item(&database, obj_id.to_string(), pay_id.to_string()).await {
+    match services::buy_item(&database, item_id.to_string(), pay_id.to_string()).await {
         Ok(result_ids) => HttpResponse::Ok().json(result_ids),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }

@@ -6,4 +6,4 @@ const api = axios.create({
 
 export const getItems = () => api.get('/items');
 export const createItem = (item) => api.post('/items', item);
-export const buyItem = (iId,pId) => api.post(`/buy/${`${iId}-${pId}`}`);
+export const buyItem = (data) => api.post(`/buy/`, data);
