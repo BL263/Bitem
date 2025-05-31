@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getItems } from '../api';
+import Payment from './Payment';
 import Icon from "../styles/Icon";
-
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
+  const [showPaymentFor, setShowPaymentFor] = useState(false);
+
+  const handleModalPayment = () => {
+    setShowPaymentFor(prev=> !prev);
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -63,6 +68,21 @@ const ItemList = () => {
                       <Icon icon="star-empty" size={40} color="blue" />
                     </div>
                   </button>
+                  <button
+                    id='payment-modal-root'
+                    className="block mt-2 bg-green-500 text-white text-center py-1 rounded hover:bg-green-600 w-full"
+                    onClick={handleModalPayment}
+                  >
+                    Buy
+                  </button>
+                  {showPaymentFor && (
+                  <Payment
+                  key={item._id?.$oid || item._id}
+                    selectedItem={item}
+                    showCardPopup={showPaymentFor}
+                    handleCardPopup={handleModalPayment}
+                  />
+                  )}
                 </div>
               </div>
             ))}
@@ -76,8 +96,6 @@ const ItemList = () => {
       </aside>
     </div>
   );
-
-
 };
 
 export default ItemList;

@@ -53,6 +53,16 @@ async fn main() -> std::io::Result<()> {
         Err(e) => println!("❌ Failed to list items: {}", e),
     } 
 
+    use actix_cors::Cors;
+
+    HttpServer::new(move || {
+        App::new()
+            .wrap(Cors::permissive()) // or use .allowed_origin("http://localhost:3000")
+            .service(buy_item)
+    })
+
+
+
     println!("MONGODB_URI = {:?}", env::var("MONGODB_URI"));
     println!("DB_NAME = {:?}", env::var("DB_NAME"));*/
     HttpServer::new(move || { App::new()

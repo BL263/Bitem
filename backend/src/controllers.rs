@@ -39,3 +39,19 @@ pub async fn get_item(path: web::Path<String>) -> impl Responder {
         Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
+
+pub async fn buy_item(path: web::Path<String>) -> impl Responder {
+    let database = db::connect_db().await;
+
+    let id = path.into_inner();
+
+    let obj_id = match ObjectId::parse_str(&id) {
+        Ok(oid) => oid,
+        Err(_) => return HttpResponse::BadRequest().body("Invalid ObjectId"),
+    };
+
+    match services::buy_item(&database, obj_id.to_string()).await {
+        Ok(_) => HttpResponse::Ok().body("Item purchased successfully"),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
+}
