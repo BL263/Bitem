@@ -6,9 +6,6 @@ mod models;
 mod services;
 mod controllers;
 mod routes;
-//use dotenv::dotenv;
-//use mongodb::bson::oid::ObjectId;
-use crate::models::Item;
 use actix_cors::Cors;
 
 #[actix_web::main]

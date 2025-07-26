@@ -4,7 +4,7 @@ import { Elements, CardElement, useStripe, useElements } from "@stripe/react-str
 import { loadStripe } from "@stripe/stripe-js";
 import { buyItem } from "../api";
 
-const stripePromise = loadStripe("pk_test_51RSfs9IMKScAQ1iqcE9KxcKmRXqUXMuIsNratkaEe1xnaNmA7nUYIFBuq4ExaNFBdgzamGSAvz0PKVcMCt0iUYpi00Tt3KU01C"); // your public key
+const stripePromise = loadStripe("pk_test_51Rp4doCR6PqAKsgMTja5JulKOaSDsrwFUFLSJD7KHf1tpp0Tnh6EZw3h8kvhxnyUzsabsRZmOsXmMTsrT4KeoYBa00FsmeRWTi"); // your public key
 
 const PaymentModal = ({ selectedItem, handleCardPopup }) => {
   const stripe = useStripe();
@@ -28,20 +28,16 @@ const PaymentModal = ({ selectedItem, handleCardPopup }) => {
     }
     
     try {
-      const validPid = /^[0-9a-fA-F]{24}$/.test(paymentMethod.id) ? paymentMethod.id : null;
-      if (!validPid) {
-        alert("Invalid payment method ID format.");
-        return;
-      }
-
       await buyItem({
-        iid: selectedItem._id, // Ensure field names match API expectations
-        pid: validPid, // Correct field name for `pid`
+        i_Id: selectedItem._id, // Ensure field names match API expectations
+        p_Id: paymentMethod.id, // Correct field name for `pid`
       });
+      console.log("Payment successful for item:", selectedItem._id);
       alert("Payment successful!");
       handleCardPopup(false);
     } catch (err) {
       alert("Payment failed: " + (err.response?.data || err.message));
+      console.error("Payment error:", err);
     }
   };
 

@@ -21,6 +21,6 @@ pub struct User {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Purchase {
-    pub iId: ObjectId,
-    pub pid: ObjectId
+    pub i_Id: ObjectId,
+    pub p_Id: String
 }

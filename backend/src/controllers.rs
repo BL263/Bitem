@@ -39,11 +39,23 @@ pub async fn get_item(path: web::Path<String>) -> impl Responder {
     }
 }
 
-pub async fn buy_item(body: web::Json<models::Purchase>) -> impl Responder {
+pub async fn buy_item(body: web::Json<serde_json::Value>) -> impl Responder {
     let database = db::connect_db().await;
+    let body_clone = body.clone();
+   
+    let body_str = match serde_json::to_string(&body) {
+        Ok(s) => s,
+        Err(_) => return HttpResponse::InternalServerError().body("Failed to serialize request body"),
+    };
 
-    let item_id = &body.iId;
-    let pay_id = &body.pid;
+    println!("Request body as string: {}", body_str);
+    let purchase: models::Purchase = match serde_json::from_value(body_clone) {
+        Ok(p) => p,
+        Err(_) => return HttpResponse::BadRequest().body("Invalid request body"),
+    };
+
+    let item_id = &purchase.i_Id;
+    let pay_id = &purchase.p_Id;
 
     match services::buy_item(&database, item_id.to_string(), pay_id.to_string()).await {
         Ok(result_ids) => HttpResponse::Ok().json(result_ids),
